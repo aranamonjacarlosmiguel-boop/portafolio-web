@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Galería de fotos y vídeos de Carlos Miguel.">
+    <title>Galería | Carlos Miguel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Variables CSS en :root (Paleta Coolors.co) */
+        :root {
+            --color-primary: #1E293B;
+            --color-secondary: #0EA5E9;
+            --color-accent: #F59E0B;
+            --color-bg: #F8FAFC;
+            --color-text: #0F172A;
+            --color-white: #FFFFFF;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--color-text);
+            line-height: 1.6;
+            margin: 0;
+            background-color: var(--color-bg);
+            display: flex;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 60px;
+            background-color: var(--color-primary);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 20px 5px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+            position: fixed;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            z-index: 100;
+        }
+        aside:is(:hover:not(.fixed), .fixed) { width: 250px; }
+        aside h2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            text-align: center;
+            white-space: nowrap;
+        }
+        aside h2 i { font-size: 2rem; margin-right: 10px; }
+        aside h2 span, aside nav a span { display: none; }
+        aside:is(:hover:not(.fixed), .fixed) :is(h2, nav a) span { display: inline; }
+        aside nav a {
+            display: flex;
+            align-items: center;
+            color: #e2e8f0;
+            text-decoration: none;
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 6px;
+            transition: background 0.2s ease, transform 0.2s ease;
+            white-space: nowrap;
+        }
+        aside nav a i { margin-right: 15px; font-size: 1.2rem; min-width: 20px; text-align: center; }
+        aside nav a:hover, aside nav a.active {
+            background-color: var(--color-secondary);
+            color: white;
+            transform: translateX(3px);
+        }
+        .pin { text-align: center; cursor: pointer; padding: 10px; }
+        .pin i { transition: color 0.3s, transform 0.3s; }
+        aside.fixed .pin i { color: var(--color-accent); transform: rotate(45deg); }
+
+        /* Contenido Principal */
+        .content {
+            flex: 1;
+            padding: 20px;
+            margin-left: 60px;
+            width: calc(100vw - 60px);
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        aside:is(:hover:not(.fixed), .fixed) ~ .content { 
+            margin-left: 250px; 
+            width: calc(100vw - 250px);
+        }
+
+        header, main, footer { width: 100%; }
+
+        header {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        header h1 { margin: 0 0 10px 0; font-size: 1.8rem; }
+        header p { margin: 0; opacity: 0.9; }
+
+        main {
+            background: white;
+            padding: 30px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+
+        /* Layout Grid */
+        .galeria-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .grid-item {
+            margin: 0;
+            background-color: var(--color-white);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        .grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.15);
+        }
+        
+        .grid-item picture {
+            width: 100%;
+            height: calc(100% - 35px);
+            display: block;
+        }
+
+        .grid-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+        .grid-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .grid-item figcaption {
+            background: var(--color-primary);
+            color: white;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .grid-item video {
+            width: 100%;
+            height: calc(100% - 35px);
+            object-fit: cover;
+            background-color: #000;
+        }
+
+        .foto-1 { grid-column: span 5; height: 280px; }
+        .foto-2 { grid-column: span 7; height: 280px; }
+        .foto-3 { grid-column: span 4; height: 260px; }
+        .foto-4 { grid-column: span 4; height: 260px; }
+        .foto-5 { grid-column: span 4; height: 260px; }
+        .video-box { grid-column: span 12; height: 400px; }
+
+        /* Visor Modal (Lightbox) */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.9);
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .lightbox-modal.active {
+            display: flex;
+        }
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+            object-fit: contain;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 2.5rem;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .lightbox-close:hover { color: var(--color-accent); }
+
+        footer { text-align: center; margin-top: 30px; padding: 15px; font-size: 0.9em; color: #718096; }
+
+        @media (max-width: 768px) {
+            .content { 
+                margin-left: 60px !important; 
+                width: calc(100vw - 60px) !important;
+            }
+            .foto-1, .foto-2, .foto-3, .foto-4, .foto-5, .video-box {
+                grid-column: span 12;
+                height: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <aside id="sidebar">
+        <div class="pin" title="Fijar menú"><i class="fa-solid fa-thumbtack"></i></div>
+        <h2><i class="fa-solid fa-user-graduate"></i> <span>Carlos Miguel</span></h2>
+        <nav>
+            <a href="index.html"><i class="fa-solid fa-house"></i> <span>Inicio</span></a>
+            <a href="sobremi.html"><i class="fa-solid fa-id-card"></i> <span>Sobre mí</span></a>
+            <a href="proyectos.html"><i class="fa-solid fa-laptop-code"></i> <span>Proyectos</span></a>
+            <a href="galeria.html" class="active"><i class="fa-solid fa-images"></i> <span>Galería</span></a>
+            <a href="blog.html"><i class="fa-solid fa-blog"></i> <span>Blog</span></a>
+            <a href="contacto.html"><i class="fa-solid fa-envelope"></i> <span>Contacto</span></a>
+        </nav>
+    </aside>
+
+    <div class="content">
+        <header>
+            <h1><i class="fa-solid fa-images"></i> Galería de Proyectos</h1>
+            <p>Registro fotográfico y audiovisual (Haz clic en cualquier imagen para verla completa)</p>
+        </header>
+
+        <main>
+            <h2 style="color: var(--color-primary);"><i class="fa-solid fa-photo-film"></i> Mis Fotografías y Multimedia</h2>
+            
+            <div class="galeria-grid">
+                <figure class="grid-item foto-1">
+                    <picture>
+                        <source media="(min-width: 768px)" srcset="foto1.png">
+                        <img src="foto1.png" alt="Maquetación Web en HTML5 y CSS3" loading="lazy">
+                    </picture>
+                    <figcaption>1. Maquetación Web en HTML5/CSS3</figcaption>
+                </figure>
+
+                <figure class="grid-item foto-2">
+                    <picture>
+                        <source media="(min-width: 768px)" srcset="foto2.jpeg">
+                        <img src="foto2.jpeg" alt="Arquitectura de Sistemas de TI" loading="lazy">
+                    </picture>
+                    <figcaption>2. Arquitectura de Sistemas de TI</figcaption>
+                </figure>
+
+                <figure class="grid-item foto-3">
+                    <picture>
+                        <source media="(min-width: 768px)" srcset="foto3.jpeg">
+                        <img src="foto3.jpeg" alt="Trabajo Colaborativo en Laboratorio" loading="lazy">
+                    </picture>
+                    <figcaption>3. Trabajo Colaborativo en Laboratorio</figcaption>
+                </figure>
+
+                <figure class="grid-item foto-4">
+                    <picture>
+                        <source media="(min-width: 768px)" srcset="foto4.jpeg">
+                        <img src="foto4.jpeg" alt="Configuración de Servidores" loading="lazy">
+                    </picture>
+                    <figcaption>4. Configuración de Servidores</figcaption>
+                </figure>
+
+                <figure class="grid-item foto-5">
+                    <picture>
+                        <source media="(min-width: 768px)" srcset="foto5.jpeg">
+                        <img src="foto5.jpeg" alt="Pruebas de Calidad de Software" loading="lazy">
+                    </picture>
+                    <figcaption>5. Pruebas de Calidad de Software</figcaption>
+                </figure>
+
+                <!-- Video Nativo Corto con Subtítulos VTT -->
+                <figure class="grid-item video-box">
+                    <video controls poster="foto1.png" preload="metadata">
+                        <source src="mi-video.mp4" type="video/mp4">
+                        <track src="subtitulos-es.vtt" kind="subtitles" srclang="es" label="Español" default>
+                        Tu navegador no soporta el reproductor de video HTML5.
+                    </video>
+                    <figcaption>Demostración en video corto de la interfaz responsiva del sitio personal.</figcaption>
+                </figure>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; <time datetime="2026">2026</time> Carlos Miguel - Todos los derechos reservados.</p>
+        </footer>
+    </div>
+
+    <!-- Modal para ver imagen completa -->
+    <div class="lightbox-modal" id="lightbox">
+        <span class="lightbox-close" id="lightbox-close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img" src="" alt="Vista ampliada">
+    </div>
+
+    <script>
+        document.querySelector('.pin').onclick = () => 
+            document.getElementById('sidebar').classList.toggle('fixed');
+
+        /* Visor Lightbox */
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxClose = document.getElementById('lightbox-close');
+
+        document.querySelectorAll('.grid-item img').forEach(img => {
+            img.addEventListener('click', () => {
+                lightboxImg.src = img.src;
+                lightbox.classList.add('active');
+            });
+        });
+
+        lightboxClose.onclick = () => lightbox.classList.remove('active');
+        lightbox.onclick = (e) => {
+            if (e.target !== lightboxImg) lightbox.classList.remove('active');
+        };
+    </script>
+</body>
+</html>

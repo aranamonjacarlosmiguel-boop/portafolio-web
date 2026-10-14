@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Blog personal y artículos de tecnología de Carlos Miguel sobre desarrollo web y servicios de TI.">
+    <meta name="keywords" content="Carlos Miguel, Blog, Desarrollo Web, HTML5, CSS3, JavaScript, TI">
+    <title>Blog | Carlos Miguel - Portafolio Profesional</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Variables CSS en :root (Paleta Coolors.co) */
+        :root {
+            --color-primary: #1E293B;
+            --color-secondary: #0EA5E9;
+            --color-accent: #F59E0B;
+            --color-bg: #F8FAFC;
+            --color-text: #0F172A;
+            --color-white: #FFFFFF;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--color-text);
+            line-height: 1.6;
+            margin: 0;
+            background-color: var(--color-bg);
+            display: flex;
+        }
+
+        /* Sidebar Persistente */
+        aside {
+            width: 60px;
+            background-color: var(--color-primary);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 20px 5px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+            position: fixed;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            z-index: 100;
+        }
+        aside:is(:hover:not(.fixed), .fixed) { width: 250px; }
+        aside h2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            text-align: center;
+            white-space: nowrap;
+        }
+        aside h2 i { font-size: 2rem; margin-right: 10px; }
+        aside h2 span, aside nav a span { display: none; }
+        aside:is(:hover:not(.fixed), .fixed) :is(h2, nav a) span { display: inline; }
+        aside nav a {
+            display: flex;
+            align-items: center;
+            color: #e2e8f0;
+            text-decoration: none;
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 6px;
+            transition: background 0.2s ease, transform 0.2s ease;
+            white-space: nowrap;
+        }
+        aside nav a i { margin-right: 15px; font-size: 1.2rem; min-width: 20px; text-align: center; }
+        aside nav a:hover, aside nav a.active {
+            background-color: var(--color-secondary);
+            color: white;
+            transform: translateX(3px);
+        }
+        .pin { text-align: center; cursor: pointer; padding: 10px; }
+        .pin i { transition: color 0.3s, transform 0.3s; }
+        aside.fixed .pin i { color: var(--color-accent); transform: rotate(45deg); }
+
+        /* Contenido Principal a Pantalla Completa Total */
+        .content {
+            flex: 1;
+            padding: 20px;
+            margin-left: 60px;
+            width: calc(100vw - 60px);
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        aside:is(:hover:not(.fixed), .fixed) ~ .content { 
+            margin-left: 250px; 
+            width: calc(100vw - 250px);
+        }
+
+        header, main, footer { width: 100%; }
+
+        /* Animación fadeInUp */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        header {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        header h1 { margin: 0 0 10px 0; font-size: 1.8rem; }
+        header p { margin: 0; opacity: 0.9; }
+
+        main {
+            background: white;
+            padding: 30px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+
+        /* Tarjetas de Artículos */
+        .article-card {
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 25px;
+            margin-bottom: 25px;
+            transition: transform 0.2s ease;
+        }
+        .article-card:hover {
+            transform: translateY(-2px);
+        }
+        .article-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .article-card h3 { color: var(--color-primary); margin-top: 0; font-size: 1.3rem; }
+        .article-meta {
+            font-size: 0.85em;
+            color: #718096;
+            margin-bottom: 12px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .article-meta i { margin-right: 5px; color: var(--color-secondary); }
+        .tag {
+            background-color: #e2e8f0;
+            color: var(--color-primary);
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        img { 
+            width: 100%; 
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 8px; 
+            margin-top: 15px; 
+            display: block; 
+        }
+
+        footer { text-align: center; margin-top: 30px; padding: 15px; font-size: 0.9em; color: #718096; }
+
+        @media (max-width: 768px) {
+            .content { 
+                margin-left: 60px !important; 
+                width: calc(100vw - 60px) !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Barra lateral de navegación -->
+    <aside id="sidebar">
+        <div class="pin" title="Fijar menú"><i class="fa-solid fa-thumbtack"></i></div>
+        <h2><i class="fa-solid fa-user-graduate"></i> <span>Carlos Miguel</span></h2>
+        <nav>
+            <a href="index.html"><i class="fa-solid fa-house"></i> <span>Inicio</span></a>
+            <a href="sobremi.html"><i class="fa-solid fa-id-card"></i> <span>Sobre mí</span></a>
+            <a href="proyectos.html"><i class="fa-solid fa-laptop-code"></i> <span>Proyectos</span></a>
+            <a href="galeria.html"><i class="fa-solid fa-images"></i> <span>Galería</span></a>
+            <a href="blog.html" class="active"><i class="fa-solid fa-blog"></i> <span>Blog</span></a>
+            <a href="contacto.html"><i class="fa-solid fa-envelope"></i> <span>Contacto</span></a>
+        </nav>
+    </aside>
+
+    <!-- Contenido principal -->
+    <div class="content">
+        <header>
+            <h1><i class="fa-solid fa-newspaper"></i> Blog Tecnológico</h1>
+            <p>Publicaciones sobre desarrollo web, herramientas y aprendizaje en TI</p>
+        </header>
+
+        <main>
+            <h2 style="color: var(--color-primary); margin-bottom: 25px;">Artículos Recientes</h2>
+
+            <article class="article-card">
+                <h3><i class="fa-solid fa-code"></i> Introducción al Desarrollo Web con HTML5 y CSS3</h3>
+                <div class="article-meta">
+                    <span><i class="fa-solid fa-calendar-days"></i> <time datetime="2026-09">Septiembre 2026</time></span>
+                    <span><i class="fa-solid fa-user"></i> Carlos Miguel</span>
+                    <span class="tag">HTML/CSS</span>
+                </div>
+                <p>En este artículo comparto los conceptos fundamentales para construir sitios web estructurados y modernos. Hablamos sobre <mark>etiquetas semánticas</mark>, estilos responsivos mediante Flexbox y Grid, y el uso de variables CSS globales en <code>:root</code>.</p>
+                <img src="foto1.png" alt="Desarrollo Web en HTML5 y CSS3" loading="lazy">
+            </article>
+
+            <article class="article-card">
+                <h3><i class="fa-solid fa-laptop"></i> Mi Experiencia Estudiando Arquitectura de TI</h3>
+                <div class="article-meta">
+                    <span><i class="fa-solid fa-calendar-days"></i> <time datetime="2026-08">Agosto 2026</time></span>
+                    <span><i class="fa-solid fa-user"></i> Carlos Miguel</span>
+                    <span class="tag">Educación</span>
+                </div>
+                <p>Un recorrido personal por los retos y aprendizajes durante mi formación académica en el <strong>IES IDEX República Federal de Alemania</strong>, destacando la práctica constante en laboratorios de computación y soporte técnico.</p>
+                <img src="foto3.jpeg" alt="Estudios en IES IDEX República Federal de Alemania" loading="lazy">
+            </article>
+
+            <article class="article-card">
+                <h3><i class="fa-solid fa-gears"></i> Manipulación del DOM e Interacción con JavaScript</h3>
+                <div class="article-meta">
+                    <span><i class="fa-solid fa-calendar-days"></i> <time datetime="2026-07">Julio 2026</time></span>
+                    <span><i class="fa-solid fa-user"></i> Carlos Miguel</span>
+                    <span class="tag">JavaScript</span>
+                </div>
+                <p>Cómo implementar dinamismo mediante eventos en JavaScript para crear componentes interactivos como <mark>carruseles de imágenes</mark> y menús colapsables que optimizan la experiencia de usuario sin afectar el rendimiento.</p>
+            </article>
+        </main>
+
+        <footer>
+            <p>&copy; <time datetime="2026">2026</time> Carlos Miguel - Todos los derechos reservados.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.querySelector('.pin').onclick = () => 
+            document.getElementById('sidebar').classList.toggle('fixed');
+    </script>
+</body>
+</html>

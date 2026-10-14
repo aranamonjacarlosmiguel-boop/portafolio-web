@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Formulario de contacto profesional para consultas y propuestas técnicas con Carlos Miguel.">
+    <title>Contacto | Carlos Miguel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Variables CSS en :root (Paleta Coolors.co) */
+        :root {
+            --color-primary: #1E293B;
+            --color-secondary: #0EA5E9;
+            --color-accent: #F59E0B;
+            --color-bg: #F8FAFC;
+            --color-text: #0F172A;
+            --color-white: #FFFFFF;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--color-text);
+            line-height: 1.6;
+            margin: 0;
+            background-color: var(--color-bg);
+            display: flex;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 60px;
+            background-color: var(--color-primary);
+            color: #e2e8f0;
+            min-height: 100vh;
+            padding: 20px 5px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+            position: fixed;
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            z-index: 100;
+        }
+        aside:is(:hover:not(.fixed), .fixed) { width: 250px; }
+        aside h2 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1rem;
+            text-align: center;
+            white-space: nowrap;
+        }
+        aside h2 i { font-size: 2rem; margin-right: 10px; }
+        aside h2 span, aside nav a span { display: none; }
+        aside:is(:hover:not(.fixed), .fixed) :is(h2, nav a) span { display: inline; }
+        aside nav a {
+            display: flex;
+            align-items: center;
+            color: #e2e8f0;
+            text-decoration: none;
+            padding: 12px 15px;
+            margin: 8px 0;
+            border-radius: 6px;
+            transition: background 0.2s ease, transform 0.2s ease;
+            white-space: nowrap;
+        }
+        aside nav a i { margin-right: 15px; font-size: 1.2rem; min-width: 20px; text-align: center; }
+        aside nav a:hover, aside nav a.active {
+            background-color: var(--color-secondary);
+            color: white;
+            transform: translateX(3px);
+        }
+        .pin { text-align: center; cursor: pointer; padding: 10px; }
+        .pin i { transition: color 0.3s, transform 0.3s; }
+        aside.fixed .pin i { color: var(--color-accent); transform: rotate(45deg); }
+
+        /* Contenido Principal a Pantalla Completa Total */
+        .content {
+            flex: 1;
+            padding: 20px;
+            margin-left: 60px;
+            width: calc(100vw - 60px);
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        aside:is(:hover:not(.fixed), .fixed) ~ .content { 
+            margin-left: 250px; 
+            width: calc(100vw - 250px);
+        }
+
+        header, main, footer { width: 100%; }
+
+        header {
+            background-color: var(--color-primary);
+            color: white;
+            padding: 25px;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        header h1 { margin: 0 0 10px 0; font-size: 1.8rem; }
+        header p { margin: 0; opacity: 0.9; }
+
+        main {
+            background: white;
+            padding: 30px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+
+        .contact-box {
+            background-color: #f0f9ff;
+            border: 1px solid #bae6fd;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .email-link {
+            display: inline-block;
+            margin-top: 5px;
+            font-size: 1.1rem;
+            color: var(--color-secondary);
+            font-weight: bold;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+        .email-link:hover { color: var(--color-primary); text-decoration: underline; }
+
+        /* ESTILOS DEL FORMULARIO ESTRUCTURADO Y VALIDADO */
+        fieldset {
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            background: #FAFAFA;
+        }
+        legend {
+            font-weight: bold;
+            color: var(--color-primary);
+            padding: 0 10px;
+            font-size: 1.1em;
+        }
+        .form-group {
+            margin-bottom: 18px;
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            margin-bottom: 6px;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+        .form-control {
+            padding: 10px 14px;
+            border: 1px solid #CBD5E1;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .form-control:focus {
+            outline: none;
+            border-color: var(--color-secondary);
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+        }
+        .radio-group, .checkbox-group {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin-top: 5px;
+        }
+        .btn-submit {
+            background-color: var(--color-secondary);
+            color: white;
+            padding: 12px 28px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+        }
+        .btn-submit:hover {
+            background-color: var(--color-accent);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        footer { text-align: center; margin-top: 30px; padding: 15px; font-size: 0.9em; color: #718096; }
+
+        @media (max-width: 768px) {
+            .content { 
+                margin-left: 60px !important; 
+                width: calc(100vw - 60px) !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <aside id="sidebar">
+        <div class="pin" title="Fijar menú"><i class="fa-solid fa-thumbtack"></i></div>
+        <h2><i class="fa-solid fa-user-graduate"></i> <span>Carlos Miguel</span></h2>
+        <nav>
+            <a href="index.html"><i class="fa-solid fa-house"></i> <span>Inicio</span></a>
+            <a href="sobremi.html"><i class="fa-solid fa-id-card"></i> <span>Sobre mí</span></a>
+            <a href="proyectos.html"><i class="fa-solid fa-laptop-code"></i> <span>Proyectos</span></a>
+            <a href="galeria.html"><i class="fa-solid fa-images"></i> <span>Galería</span></a>
+            <a href="blog.html"><i class="fa-solid fa-blog"></i> <span>Blog</span></a>
+            <a href="contacto.html" class="active"><i class="fa-solid fa-envelope"></i> <span>Contacto</span></a>
+        </nav>
+    </aside>
+
+    <div class="content">
+        <header>
+            <h1>Contacto Profesional</h1>
+            <p>¿Tienes alguna consulta o propuesta? ¡Escríbeme un mensaje!</p>
+        </header>
+
+        <main>
+            <!-- CAJA INFORMATIVA DE CORREO -->
+            <div class="contact-box">
+                <h2><i class="fa-solid fa-paper-plane"></i> Correo Directo del Estudiante:</h2>
+                <a class="email-link" href="mailto:ati60560374@istrfa.edu.pe">
+                    <i class="fa-solid fa-at"></i> ati60560374@istrfa.edu.pe
+                </a>
+            </div>
+
+            <!-- FORMULARIO DE CONTACTO COMPLETO Y VALIDADO (Ítems 15, 16 y 17) -->
+            <form action="mailto:ati60560374@istrfa.edu.pe" method="post" enctype="text/plain">
+                <fieldset>
+                    <legend><i class="fa-solid fa-user"></i> Datos Personales del Remitente</legend>
+
+                    <div class="form-group">
+                        <label for="nombre">Nombre Completo *</label>
+                        <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Ej. Carlos Miguel" required pattern="[A-Za-zÁéíóúÁÉÍÓÚñÑ\s]{3,40}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Correo Electrónico *</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="ati60560374@istrfa.edu.pe" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Teléfono / WhatsApp</label>
+                        <input type="tel" id="telefono" name="telefono" class="form-control" placeholder="987654321" pattern="[0-9]{9}">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fecha">Fecha Estimada de Contacto</label>
+                        <input type="date" id="fecha" name="fecha" class="form-control">
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <legend><i class="fa-solid fa-list-check"></i> Detalles de la Consulta o Proyecto</legend>
+
+                    <div class="form-group">
+                        <label for="tipo_servicio">Categoría del Proyecto (Select con optgroup) *</label>
+                        <select id="tipo_servicio" name="tipo_servicio" class="form-control" required>
+                            <option value="" disabled selected>Seleccione una opción...</option>
+                            <optgroup label="Desarrollo Web">
+                                <option value="web_estatica">Sitio Web Informativo</option>
+                                <option value="web_dinamica">Aplicación Web Personalizada</option>
+                            </optgroup>
+                            <optgroup label="Infraestructura & Redes">
+                                <option value="redes">Configuración de Servidores</option>
+                                <option value="soporte">Soporte Técnico de TI</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tecnologia">Tecnología de Interés (Sugerencias con Datalist)</label>
+                        <input type="text" id="tecnologia" name="tecnologia" class="form-control" list="lista-tecnologias" placeholder="Escriba o seleccione una tecnología...">
+                        <datalist id="lista-tecnologias">
+                            <option value="HTML5 / CSS3 / JavaScript"></option>
+                            <option value="Python / MySQL"></option>
+                            <option value="Infraestructura de Redes TI"></option>
+                        </datalist>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Modalidad Preferida</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="modalidad" value="remoto" checked> Remoto</label>
+                            <label><input type="radio" name="modalidad" value="presencial"> Presencial</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="adjunto">Adjuntar Especificaciones (PDF/ZIP)</label>
+                        <input type="file" id="adjunto" name="adjunto" class="form-control" accept=".pdf,.zip">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mensaje">Mensaje o Detalle del Proyecto *</label>
+                        <textarea id="mensaje" name="mensaje" rows="5" class="form-control" placeholder="Escriba aquí los detalles de su consulta..." required minlength="10"></textarea>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="terminos" name="terminos" required>
+                        <label for="terminos" style="margin-bottom:0;">Acepto los términos de contacto y uso de datos *</label>
+                    </div>
+                </fieldset>
+
+                <button type="submit" class="btn-submit"><i class="fa-solid fa-paper-plane"></i> Enviar Mensaje</button>
+            </form>
+        </main>
+
+        <footer>
+            <p>&copy; <time datetime="2026">2026</time> Carlos Miguel - Todos los derechos reservados.</p>
+        </footer>
+    </div>
+
+    <script>
+        document.querySelector('.pin').onclick = () => 
+            document.getElementById('sidebar').classList.toggle('fixed');
+    </script>
+</body>
+</html>
