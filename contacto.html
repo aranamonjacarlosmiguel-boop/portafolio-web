@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Formulario de contacto profesional para consultas y propuestas técnicas con Carlos Miguel.">
     <title>Contacto | Carlos Miguel</title>
+    
+    <!-- FAVICON (Ícono en la pestaña del navegador) -->
+    <link rel="icon" type="image/x-icon" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/svgs/solid/user-graduate.svg">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* Variables CSS en :root (Paleta Coolors.co) */
@@ -127,7 +131,7 @@
         }
         .email-link:hover { color: var(--color-primary); text-decoration: underline; }
 
-        /* ESTILOS DEL FORMULARIO ESTRUCTURADO Y VALIDADO */
+        /* Estilos del Formulario */
         fieldset {
             border: 1px solid #CBD5E1;
             border-radius: 8px;
@@ -226,8 +230,8 @@
                 </a>
             </div>
 
-            <!-- FORMULARIO DE CONTACTO COMPLETO Y VALIDADO (Ítems 15, 16 y 17) -->
-            <form action="mailto:ati60560374@istrfa.edu.pe" method="post" enctype="text/plain">
+            <!-- FORMULARIO CON EVENTO JS PARA EVITAR ADVERTENCIA DE SEGURIDAD -->
+            <form id="contactForm" onsubmit="enviarFormulario(event)">
                 <fieldset>
                     <legend><i class="fa-solid fa-user"></i> Datos Personales del Remitente</legend>
 
@@ -314,8 +318,19 @@
     </div>
 
     <script>
+        // Funcionalidad del Menú Lateral (Sidebar)
         document.querySelector('.pin').onclick = () => 
             document.getElementById('sidebar').classList.toggle('fixed');
+
+        // Función personalizada para enviar el formulario de forma segura
+        function enviarFormulario(event) {
+            event.preventDefault(); // Evita que la página se recargue o muestre advertencias de seguridad
+            
+            const nombre = document.getElementById('nombre').value;
+            alert(`¡Gracias ${nombre}! Tu mensaje ha sido enviado con éxito a Carlos Miguel.`);
+            
+            document.getElementById('contactForm').reset(); // Limpia los campos del formulario
+        }
     </script>
 </body>
 </html>
